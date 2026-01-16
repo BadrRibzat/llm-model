@@ -20,9 +20,14 @@ export default function Home() {
               <a href="#about" className="text-gray-500 hover:text-gray-900">About</a>
               <Link href="/support" className="text-gray-500 hover:text-gray-900">Support</Link>
               {user ? (
-                <Link href="/chat" className="text-indigo-600 hover:text-indigo-900 font-medium">
-                  Go to Chat
-                </Link>
+                <div className="flex space-x-4">
+                  <Link href="/admin" className="text-gray-500 hover:text-gray-900">
+                    Admin
+                  </Link>
+                  <Link href="/chat" className="text-indigo-600 hover:text-indigo-900 font-medium">
+                    Go to Chat
+                  </Link>
+                </div>
               ) : (
                 <div className="flex space-x-4">
                   <Link href="/login" className="text-gray-500 hover:text-gray-900">

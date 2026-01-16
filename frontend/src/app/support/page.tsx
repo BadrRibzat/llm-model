@@ -15,6 +15,7 @@ export default function Support() {
               <Link href="/#features" className="text-gray-500 hover:text-gray-900">Features</Link>
               <Link href="/#about" className="text-gray-500 hover:text-gray-900">About</Link>
               <Link href="/support" className="text-indigo-600 hover:text-indigo-900 font-medium">Support</Link>
+              <Link href="/admin" className="text-gray-500 hover:text-gray-900">Admin</Link>
               <div className="flex space-x-4">
                 <Link href="/login" className="text-gray-500 hover:text-gray-900">
                   Sign In

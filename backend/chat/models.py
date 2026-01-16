@@ -11,3 +11,17 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return self.user.username
+
+class Chat(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    message = models.TextField()
+    response = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-timestamp']
+        verbose_name = 'Chat Message'
+        verbose_name_plural = 'Chat Messages'
+
+    def __str__(self):
+        return f"{self.user.username}: {self.message[:50]}..."
