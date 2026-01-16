@@ -6,6 +6,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.models import User
 from .serializers import UserSerializer, RegisterSerializer, UserProfileSerializer
 from .models import UserProfile, Chat
+from .ai_service import ai_service
 from pymongo import MongoClient
 import os
 
@@ -49,9 +50,8 @@ class ChatView(generics.GenericAPIView):
         if not message:
             return Response({'error': 'Message is required'}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Here, integrate with your LLM model
-        # For now, just echo the message
-        response = f"Echo: {message}"
+        # Generate AI response using the trained model
+        response = ai_service.generate_response(message)
 
         # Save to Django database for admin interface
         chat_obj = Chat.objects.create(
