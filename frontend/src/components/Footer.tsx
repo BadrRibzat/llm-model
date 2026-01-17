@@ -12,12 +12,12 @@ export default function Footer() {
   }
 
   return (
-    <footer className="bg-gray-900 text-white">
+    <footer className="bg-slate-950/40 border-t border-white/10 backdrop-blur text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Owner Information */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">About the Developer</h3>
+            <h3 className="text-lg font-semibold mb-4 text-white">About the Developer</h3>
             <div className="space-y-2 text-sm">
               <p><strong>Name:</strong> Badr Ribzat</p>
               <p>
@@ -98,16 +98,16 @@ export default function Footer() {
 
           {/* Support */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Support the Project</h3>
-            <p className="text-sm text-gray-300 mb-4">
-              Help keep AI Chat Model free and open source. Your support enables continued development and improvements.
+            <h3 className="text-lg font-semibold mb-4 text-white">Support the Project</h3>
+            <p className="text-sm text-slate-400 mb-4">
+              Help keep NOVA free and open source. Your support enables continued development and improvements.
             </p>
             <div className="space-y-2">
               <a
                 href="https://ko-fi.com/badrribzat"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block bg-blue-600 hover:bg-blue-700 text-white text-center py-2 px-4 rounded-md text-sm font-medium transition-colors"
+                className="block nova-button text-white text-center py-2 px-4 rounded-xl text-sm font-medium transition-colors"
               >
                 Support on Ko-fi
               </a>
@@ -115,7 +115,7 @@ export default function Footer() {
                 href="https://paypal.me/BadrRibzat1990"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block bg-yellow-600 hover:bg-yellow-700 text-white text-center py-2 px-4 rounded-md text-sm font-medium transition-colors"
+                className="block bg-amber-600 hover:bg-amber-700 text-white text-center py-2 px-4 rounded-xl text-sm font-medium transition-colors"
               >
                 Donate via PayPal
               </a>
@@ -124,10 +124,10 @@ export default function Footer() {
         </div>
 
         {/* Copyright and License */}
-        <div className="border-t border-gray-700 mt-8 pt-8">
+        <div className="border-t border-white/10 mt-8 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="text-sm text-gray-400 mb-4 md:mb-0">
-              <p>&copy; 2026 AI Chat Model. All rights reserved.</p>
+            <div className="text-sm text-slate-400 mb-4 md:mb-0">
+              <p>&copy; 2026 NOVA. All rights reserved.</p>
               <p className="mt-1">
                 This project is licensed under the{' '}
                 <a

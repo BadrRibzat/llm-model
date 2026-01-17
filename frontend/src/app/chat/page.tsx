@@ -7,6 +7,7 @@ import axios from 'axios';
 import CodeBlock from '@/components/CodeBlock';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import { NovaLogo } from "@/components/NovaLogo";
 
 interface Message {
   id: string;
@@ -137,11 +138,11 @@ export default function Chat() {
       const updatedMessages = messages.map(msg =>
         msg.id === messageId
           ? {
-              ...msg,
-              response: response.data.response,
-              artifacts: response.data.artifacts || [],
-              timestamp: new Date().toISOString(),
-            }
+            ...msg,
+            response: response.data.response,
+            artifacts: response.data.artifacts || [],
+            timestamp: new Date().toISOString(),
+          }
           : msg
       );
 
@@ -294,9 +295,9 @@ export default function Chat() {
   };
 
   return (
-    <div className={`h-screen flex ${darkMode ? 'bg-gray-900 text-white' : 'bg-gray-50 text-gray-900'}`}>
+    <div className="h-screen flex bg-transparent text-slate-100">
       {/* Sidebar */}
-      <div className={`${sidebarOpen ? 'w-80' : 'w-0'} transition-all duration-300 overflow-hidden border-r ${darkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white'}`}>
+      <div className={`${sidebarOpen ? "w-80" : "w-0"} transition-all duration-300 overflow-hidden border-r border-white/10 bg-slate-950/40 backdrop-blur`}>
         <div className="p-4">
           {/* User Info */}
           <div className="flex items-center space-x-3 mb-6">
@@ -336,11 +337,10 @@ export default function Chat() {
               <button
                 key={session.id}
                 onClick={() => loadSession(session.id)}
-                className={`w-full text-left p-3 rounded-lg transition-all duration-200 ${
-                  session.id === currentSessionId
+                className={`w-full text-left p-3 rounded-lg transition-all duration-200 ${session.id === currentSessionId
                     ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white'
-                    : `hover:bg-gray-100 dark:hover:bg-gray-700 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`
-                }`}
+                    : 'hover:bg-white/5 text-slate-300'
+                  }`}
               >
                 <div className="flex items-start space-x-3">
                   <div className="w-2 h-2 bg-current rounded-full mt-2 flex-shrink-0"></div>
@@ -361,7 +361,7 @@ export default function Chat() {
       {/* Main Chat Area */}
       <div className="flex-1 flex flex-col">
         {/* Header */}
-        <div className={`border-b ${darkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white'} p-4`}>
+        <div className="border-b border-white/10 bg-slate-950/35 backdrop-blur p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <button
@@ -372,8 +372,10 @@ export default function Chat() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
               </button>
-              <h1 className="text-xl font-semibold">AI Chat Model</h1>
-              <span className="text-sm text-gray-500">Powered by DialoGPT-medium</span>
+              <NovaLogo />
+              <span className="hidden sm:inline-flex text-xs text-slate-300 border border-white/10 px-3 py-1 rounded-full bg-white/5">
+                Open Source LLM
+              </span>
             </div>
 
             <div className="flex items-center space-x-2">
@@ -441,17 +443,17 @@ export default function Chat() {
               <h3 className={`text-lg font-medium mb-2 ${darkMode ? 'text-gray-300' : 'text-gray-900'}`}>
                 Start a conversation
               </h3>
-              <p className={`text-sm ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>
-                Send a message to begin chatting with AI Chat Model
+              <p className="text-sm text-slate-500">
+                Send a message to begin chatting with NOVA
               </p>
               <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto">
-                <div className={`p-4 rounded-lg border ${darkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white'}`}>
-                  <h4 className="font-medium mb-2">💡 Ask anything</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Get help with questions, explanations, or creative tasks</p>
+                <div className="p-4 rounded-lg border border-white/10 bg-slate-950/40">
+                  <h4 className="font-medium mb-2 text-white">💡 Ask anything</h4>
+                  <p className="text-sm text-slate-400">Get help with questions, explanations, or creative tasks</p>
                 </div>
-                <div className={`p-4 rounded-lg border ${darkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white'}`}>
-                  <h4 className="font-medium mb-2">📎 Upload files</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Share documents, images, or data for analysis</p>
+                <div className="p-4 rounded-lg border border-white/10 bg-slate-950/40">
+                  <h4 className="font-medium mb-2 text-white">📎 Upload files</h4>
+                  <p className="text-sm text-slate-400">Share documents, images, or data for analysis</p>
                 </div>
               </div>
             </div>
@@ -460,9 +462,8 @@ export default function Chat() {
               <div key={msg.id} className="space-y-4">
                 {/* User Message */}
                 <div className="flex justify-end">
-                  <div className={`max-w-2xl px-4 py-3 rounded-2xl ${
-                    darkMode ? 'bg-blue-600 text-white' : 'bg-gradient-to-r from-blue-500 to-purple-600 text-white'
-                  }`}>
+                  <div className={`max-w-2xl px-4 py-3 rounded-2xl ${darkMode ? 'bg-blue-600 text-white' : 'bg-gradient-to-r from-blue-500 to-purple-600 text-white'
+                    }`}>
                     <p className="text-sm leading-relaxed">{msg.message}</p>
                     {msg.attachments && msg.attachments.length > 0 && (
                       <div className="mt-3 space-y-2">
@@ -481,75 +482,76 @@ export default function Chat() {
 
                 {/* AI Response */}
                 <div className="flex justify-start">
-                  <div className={`max-w-4xl px-4 py-3 rounded-2xl ${
-                    darkMode ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-200'
-                  }`}>
-                    <div className={`text-sm leading-relaxed whitespace-pre-wrap ${darkMode ? 'text-gray-200' : 'text-gray-900'}`}>
-                      {msg.response}
-                    </div>
+                  <div className="max-w-4xl w-full">
+                    <div className="nova-gradient-frame p-[1px] rounded-2xl nova-neon-shadow">
+                      <div className="rounded-2xl bg-slate-950/60 border border-white/10 px-4 py-3">
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="text-sm font-semibold nova-text">Nova</span>
+                          <span className="text-xs text-slate-400">•</span>
+                          <span className="text-xs text-slate-400">
+                            {new Date(msg.timestamp).toLocaleTimeString()}
+                          </span>
+                        </div>
 
-                    {/* Action Buttons */}
-                    <div className={`flex items-center justify-between mt-4 pt-3 border-t ${darkMode ? 'border-gray-700' : 'border-gray-200'}`}>
-                      <div className="flex space-x-2">
-                        <button
-                          onClick={() => navigator.clipboard.writeText(msg.response)}
-                          className={`text-xs px-3 py-1 rounded-lg transition-colors ${
-                            darkMode ? 'text-gray-400 hover:text-gray-200 hover:bg-gray-700' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
-                          }`}
-                          title="Copy response"
-                        >
-                          <svg className="w-3 h-3 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                          </svg>
-                          Copy
-                        </button>
-                        <button
-                          onClick={() => shareMessage(msg)}
-                          className={`text-xs px-3 py-1 rounded-lg transition-colors ${
-                            darkMode ? 'text-gray-400 hover:text-gray-200 hover:bg-gray-700' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
-                          }`}
-                          title="Share message"
-                        >
-                          <svg className="w-3 h-3 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
-                          </svg>
-                          Share
-                        </button>
-                        <button
-                          onClick={() => regenerateResponse(msg.id)}
-                          disabled={loading}
-                          className={`text-xs px-3 py-1 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
-                            darkMode ? 'text-gray-400 hover:text-gray-200 hover:bg-gray-700' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
-                          }`}
-                          title="Regenerate response"
-                        >
-                          <svg className="w-3 h-3 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                          </svg>
-                          Regenerate
-                        </button>
-                      </div>
-                      <div className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>
-                        {new Date(msg.timestamp).toLocaleTimeString()}
-                      </div>
-                    </div>
+                        <div className="text-sm leading-relaxed whitespace-pre-wrap text-slate-100/95">
+                          {msg.response}
+                        </div>
 
-                    {/* Display Artifacts */}
-                    {msg.artifacts && msg.artifacts.length > 0 && (
-                      <div className="mt-4 space-y-3">
-                        {msg.artifacts.map((artifact, index) => (
-                          <div key={index}>
-                            {artifact.type === 'code' && (
-                              <CodeBlock
-                                code={artifact.content}
-                                language={artifact.language}
-                                filename={artifact.filename}
-                              />
-                            )}
+                        {/* Action Buttons */}
+                        <div className="flex items-center justify-between mt-4 pt-3 border-t border-white/10">
+                          <div className="flex space-x-2">
+                            <button
+                              onClick={() => navigator.clipboard.writeText(msg.response)}
+                              className="text-xs px-3 py-1 rounded-lg transition-colors text-slate-400 hover:text-white hover:bg-white/10"
+                              title="Copy response"
+                            >
+                              <svg className="w-3 h-3 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                              </svg>
+                              Copy
+                            </button>
+                            <button
+                              onClick={() => shareMessage(msg)}
+                              className="text-xs px-3 py-1 rounded-lg transition-colors text-slate-400 hover:text-white hover:bg-white/10"
+                              title="Share message"
+                            >
+                              <svg className="w-3 h-3 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
+                              </svg>
+                              Share
+                            </button>
+                            <button
+                              onClick={() => regenerateResponse(msg.id)}
+                              disabled={loading}
+                              className="text-xs px-3 py-1 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-slate-400 hover:text-white hover:bg-white/10"
+                              title="Regenerate response"
+                            >
+                              <svg className="w-3 h-3 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                              </svg>
+                              Regenerate
+                            </button>
                           </div>
-                        ))}
+                        </div>
+
+                        {/* Display Artifacts */}
+                        {msg.artifacts && msg.artifacts.length > 0 && (
+                          <div className="mt-4 space-y-3">
+                            {msg.artifacts.map((artifact, index) => (
+                              <div key={index}>
+                                {artifact.type === 'code' && (
+                                  <CodeBlock
+                                    code={artifact.content}
+                                    language={artifact.language}
+                                    filename={artifact.filename}
+                                  />
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        )}
                       </div>
-                    )}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -558,9 +560,8 @@ export default function Chat() {
 
           {loading && (
             <div className="flex justify-start">
-              <div className={`max-w-xs px-4 py-3 rounded-2xl ${
-                darkMode ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-200'
-              }`}>
+              <div className={`max-w-xs px-4 py-3 rounded-2xl ${darkMode ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-200'
+                }`}>
                 <div className="flex space-x-1">
                   <div className={`w-2 h-2 rounded-full animate-bounce ${darkMode ? 'bg-gray-400' : 'bg-gray-400'}`}></div>
                   <div className={`w-2 h-2 rounded-full animate-bounce ${darkMode ? 'bg-gray-400' : 'bg-gray-400'}`} style={{ animationDelay: '0.1s' }}></div>
@@ -573,15 +574,14 @@ export default function Chat() {
         </div>
 
         {/* Input Area */}
-        <div className={`border-t ${darkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white'} p-4`}>
+        <div className="border-t border-white/10 bg-slate-950/35 backdrop-blur p-4">
           {/* Selected Files Display */}
           {selectedFiles.length > 0 && (
             <div className="mb-4 space-y-2">
               <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>Attached files:</p>
               {selectedFiles.map((file, index) => (
-                <div key={index} className={`flex items-center justify-between p-3 rounded-lg ${
-                  darkMode ? 'bg-gray-700' : 'bg-gray-50'
-                }`}>
+                <div key={index} className={`flex items-center justify-between p-3 rounded-lg ${darkMode ? 'bg-gray-700' : 'bg-gray-50'
+                  }`}>
                   <div className="flex items-center space-x-3">
                     <svg className={`w-5 h-5 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -619,11 +619,7 @@ export default function Chat() {
                     }
                   }
                 }}
-                className={`w-full px-4 py-3 pr-12 border rounded-xl resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${
-                  darkMode
-                    ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400'
-                    : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500'
-                }`}
+                className="w-full px-4 py-3 pr-12 border border-white/10 rounded-xl resize-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all bg-slate-900/50 text-white placeholder-slate-500"
                 placeholder="Type your message here... (Shift+Enter for new line)"
                 disabled={loading}
                 rows={1}
@@ -650,11 +646,10 @@ export default function Chat() {
             <button
               onClick={sendMessage}
               disabled={loading || (!input.trim() && selectedFiles.length === 0)}
-              className={`px-6 py-3 rounded-xl font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2 ${
-                loading || (!input.trim() && selectedFiles.length === 0)
-                  ? 'bg-gray-400 cursor-not-allowed'
-                  : 'bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transform hover:scale-105'
-              }`}
+              className={`px-6 py-3 rounded-xl font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2 ${loading || (!input.trim() && selectedFiles.length === 0)
+                  ? "bg-white/10 text-slate-400"
+                  : "text-white nova-button nova-neon-shadow hover:shadow-lg"
+                }`}
             >
               {loading ? (
                 <>
@@ -672,7 +667,7 @@ export default function Chat() {
             </button>
           </div>
           <p className={`mt-3 text-xs text-center ${darkMode ? 'text-gray-500' : 'text-gray-500'}`}>
-            AI Chat Model is trained across 12 domains and 74 niches for high-quality responses • Supports file uploads (PDF, DOC, images, etc.)
+            NOVA is trained across 12 domains and 74 niches for high-quality responses • Supports file uploads (PDF, DOC, images, etc.)
           </p>
         </div>
       </div>
