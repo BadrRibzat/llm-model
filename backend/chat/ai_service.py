@@ -21,10 +21,11 @@ class AIModelService:
         self.model_path = Path(__file__).parent / "models"
 
         # Model configuration
-        self.model_name = "microsoft/DialoGPT-medium"  # Better conversational model
-        self.max_length = 512
+        # Model configuration - Upgraded to modern Small Language Model (SLM)
+        self.model_name = "TinyLlama/TinyLlama-1.1B-Chat-v1.0" 
+        self.max_length = 2048
         self.temperature = 0.7
-        self.top_p = 0.9
+        self.top_p = 0.95
         self.do_sample = True
 
     def load_model(self) -> bool:
@@ -51,18 +52,18 @@ class AIModelService:
                     low_cpu_mem_usage=True
                 )
 
-                # Create pipeline for conversational AI
+                # Create pipeline for high-quality instruction following
                 self.pipeline = pipeline(
                     "text-generation",
                     model=self.model,
                     tokenizer=self.tokenizer,
                     device=0 if torch.cuda.is_available() else -1,
-                    max_new_tokens=50,  # Generate fewer new tokens for conversation
-                    temperature=0.8,    # Slightly higher temperature for more variety
+                    max_new_tokens=512,  # Allow longer, helpful responses
+                    temperature=0.7,
                     top_p=self.top_p,
                     do_sample=self.do_sample,
                     pad_token_id=self.tokenizer.eos_token_id,
-                    repetition_penalty=1.2  # Penalize repetition
+                    repetition_penalty=1.1
                 )
 
                 self.model_loaded = True
@@ -153,15 +154,12 @@ class AIModelService:
                 if outputs and len(outputs) > 0:
                     full_response = outputs[0].get('generated_text', '').strip()
 
-                    # Clean up response for conversational models
-                    if "DialoGPT" in self.model_name and "Assistant:" in enhanced_prompt:
-                        # Remove any remaining prompt parts
-                        if full_response.startswith(enhanced_prompt):
-                            response = full_response[len(enhanced_prompt):].strip()
-                        else:
-                            response = full_response
+                    # TinyLlama Chat uses specific prompt markers
+                    if "<|assistant|>" in full_response:
+                        response = full_response.split("<|assistant|>")[-1].strip()
                     else:
-                        response = full_response
+                        # Fallback cleanup
+                        response = full_response[len(enhanced_prompt):].strip() if full_response.startswith(enhanced_prompt) else full_response
 
                     # Post-process response for better quality
                     response = self._post_process_response(response, prompt)
@@ -203,26 +201,12 @@ class AIModelService:
 
     def _enhance_prompt(self, prompt: str) -> str:
         """
-        Enhance the prompt based on its content type for better responses.
+        Enhance the prompt using ChatML / TinyLlama format.
         """
-        prompt_lower = prompt.lower()
-
-        # Code-related prompts
-        if any(keyword in prompt_lower for keyword in ['code', 'program', 'function', 'script', 'python', 'javascript', 'html', 'css']):
-            enhanced = f"User: {prompt}\nAssistant: I can help you with coding. Here's what you need:"
-        # Content creation prompts
-        elif any(keyword in prompt_lower for keyword in ['write', 'create', 'generate', 'make', 'design', 'build']):
-            enhanced = f"User: {prompt}\nAssistant: I'll help you create that content. Here's my response:"
-        # Question prompts
-        elif any(keyword in prompt_lower for keyword in ['what', 'how', 'why', 'when', 'where', 'who', '?']):
-            enhanced = f"User: {prompt}\nAssistant: Let me answer your question:"
-        # File/document prompts
-        elif any(keyword in prompt_lower for keyword in ['file', 'document', 'pdf', 'upload', 'attachment']):
-            enhanced = f"User: {prompt}\nAssistant: I can help you with your files and documents:"
-        else:
-            enhanced = f"User: {prompt}\nAssistant:"
-
-        return enhanced
+        system_msg = "You are NOVA, a friendly and highly intelligent AI assistant. You provide clear, helpful, and detailed responses to users."
+        
+        # TinyLlama pattern: <|system|>\n{system}\n<|user|>\n{user}\n<|assistant|>\n
+        return f"<|system|>\n{system_msg}</s>\n<|user|>\n{prompt}</s>\n<|assistant|>\n"
 
     def _post_process_response(self, response: str, original_prompt: str) -> str:
         """
